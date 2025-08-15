@@ -1,0 +1,79 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>exe</OutputType>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PlatformTarget>x64</PlatformTarget>
+    <PackageIcon>Purcell-Icon.png</PackageIcon>
+    <ApplicationIcon>Resources\Purcell-Icon.ico</ApplicationIcon>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    <Version>1.0.0</Version>
+    <FileVersion>1.0.0</FileVersion>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <AssemblyInformationalVersion>1.0.0-EDIT-DEPS-HERE</AssemblyInformationalVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CliWrap" Version="3.9.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.1" />
+    <PackageReference Include="Postmark" Version="5.2.0" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.15.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageReference Include="Quartz.AspNetCore" Version="3.15.0" />
+  </ItemGroup>
+  
+
+    <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
+
+    <ItemGroup>
+      <Folder Include="Logs\" />
+      <Folder Include="Properties\PublishProfiles\" />
+    </ItemGroup>
+
+  <!-- 
+    Defines the properties for the packaging process.
+    - PackageDir: Specifies the directory where the final package will be stored.
+    - PackagePath: Defines the full path and filename for the package. The filename is dynamically generated 
+      to include the project name, assembly informational version, and the current timestamp.
+  -->
+  <PropertyGroup>
+    <PackageDir Condition="'$(PackageDir)' == ''">C:\Users\EddieGreen\Documents\VS Projects\01-Windows Installers\</PackageDir>
+    <PackagePath Condition="'$(PackagePath)' == ''">$([System.IO.Path]::Combine($(PackageDir), '$(MSBuildProjectName)-$(AssemblyInformationalVersion)-$([System.DateTime]::Now.ToString(`yyyy-MM-dd-HH-mm`)).zip'))</PackagePath>
+    <UserSecretsId>f707b815-bf61-4f4b-885a-f7427a86743f</UserSecretsId>
+  </PropertyGroup>
+
+  <!--
+    This target creates a zip file of the published output.
+    It runs automatically after the 'Publish' target completes.
+    - MakeDir: Ensures that the target directory for the package exists.
+    - ZipDirectory: Compresses the contents of the publish directory into a zip file.
+  -->
+  <Target Name="Package" AfterTargets="Publish">
+    <MakeDir Directories="$(PackageDir)" />
+    <ZipDirectory Overwrite="true" SourceDirectory="$(PublishDir)" DestinationFile="$(PackagePath)" />
+  </Target>
+
+  <!--
+    This target cleans up the created package.
+    It runs automatically after the 'Clean' target completes, deleting the zip file.
+  -->
+  <Target Name="PackageClean" AfterTargets="Clean">
+    <Delete Files="$(PackagePath)" />
+  </Target>
+
+  
+  </Project>
