@@ -22,6 +22,7 @@ Configuration
   - Recipients: list of Name/Email objects to notify when layouts are removed.
 
 Example (User Secrets recommended for secrets)
+``` json
 {
   "ApplicationSettings": {
     "XmlSettingsFilePath": "%LOCALAPPDATA%/Microsoft/VisualStudio/17.0_459a930b/ApplicationPrivateSettings.xml",
@@ -32,6 +33,7 @@ Example (User Secrets recommended for secrets)
     }
   }
 }
+```
 
 Where files are written
 - Snapshots: WindowsLayouts folder under the app’s working directory.
