@@ -15,7 +15,7 @@ Configuration
 - ApplicationSettings.XmlSettingsFilePath
   - Full path to Visual Studio's ApplicationPrivateSettings.xml.
   - Supports environment variables, e.g. %LOCALAPPDATA%/Microsoft/VisualStudio/17.0_459a930b/ApplicationPrivateSettings.xml.
-  - If the service runs under a different account, point this to that user’s file.
+  - If the service runs under a different account, point this to that userâ€™s file.
 - ApplicationSettings.Postmark
   - ServerToken: your Postmark server token.
   - SenderAddress: from-address the email will use.
@@ -34,16 +34,17 @@ Example (User Secrets recommended for secrets)
 }
 
 Where files are written
-- Snapshots: WindowsLayouts folder under the app’s working directory.
+- Snapshots: WindowsLayouts folder under the appâ€™s working directory.
   - Example: <app base>\WindowsLayouts\20250815142201.xml
-- Logs: Logs/VsWindowsLayoutMonitor-<date>.log under the app’s working directory (daily rolling).
+- Logs: Logs/VsWindowsLayoutMonitor-<date>.log under the appâ€™s working directory (daily rolling).
 
 How it runs
-- It’s a .NET Worker Service. When started, it schedules a periodic check (via Quartz).
+- Itâ€™s a .NET Worker Service. When started, it schedules a periodic check (via Quartz).
 - On first run, it creates a baseline snapshot and logs the current layouts.
 - Afterwards, it only saves and logs when layouts are added or removed.
 
 Sample log (redacted)
+``` csv
 15/08/2025 16:28:46.906 [INF] MonitorHostedService scheduled MonitorJob.
 15/08/2025 16:28:47.024 [INF] Current layouts: Eddie Green Dual Monitor Layout
 15/08/2025 16:29:16.953 [INF] Layouts added: New Layout 2, New Layout 1
@@ -54,7 +55,8 @@ Sample log (redacted)
 15/08/2025 16:30:16.951 [INF] Current layouts: Eddie Green Dual Monitor Layout
 15/08/2025 16:30:17.686 [INF] Postmark notification sent to ***@***.com
 15/08/2025 16:31:29.479 [INF] MonitorHostedService task was canceled.
+```
 
 Notes
 - Only layout key presence/absence is tracked (adds/removals). Content or ordering changes that do not add/remove keys are ignored.
-- If you don’t want email notifications, leave Postmark settings unset.
+- If you donâ€™t want email notifications, leave Postmark settings unset.
